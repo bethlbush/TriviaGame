@@ -7,48 +7,47 @@
   var unanswered = [];
   var remainingQuestions = [ {
     q: "Who spoke the voice of Shaggy?",
-      answer: [ "Pat Sajak", "Dick Clark", "Casey Kasem", "Alex Trebek" ],
+      answers: [ "Pat Sajak", "Dick Clark", "Casey Kasem", "Alex Trebek" ],
       correct: "Casey Kasem"
     }, {
-      q: "What color is Velma's shirt?",
-      answer: [ "red", "orange", "purple", "green" ],
-      correct: "orange"
-    }, {
       q: "What is the name of the vehicle that the kids drove?",
-      answer: [ "The Mystery Wagon", "The Mystery Van", "The Mystery Machine", "Vanorama" ],
+      answers: [ "The Mystery Wagon", "The Mystery Van", "The Mystery Machine", "Vanorama" ],
       correct: "The Mystery Machine"
     }, {
       q: "Frank Welker, the voice of Fred, also provided the voice of:",
-      answer: [ "Garfield", "Abu", "Megatron & Soundwave", "all of the above" ],
+      answers: [ "Garfield the cat", "Abu the monkey in Aladdin", "Megatron & Soundwave in The Transformers", "all of the above" ],
       correct: "all of the above"
     }, {
       q: "What is Shaggy's real name?",
-      answer: [ "Norville", "Eddie", "Steve", "Chucky" ],
+      answers: [ "Norville", "Eddie", "Steve", "Chucky" ],
       correct: "Norville"
     }, {
       q: "Who is the oldest gang member?",
-      answer: [ "Shaggy", "Velma", "Fred" , "Daphne" ],
+      answers: [ "Shaggy", "Velma", "Fred" , "Daphne" ],
       correct: "Shaggy"
     }, {
       q: "In what year was the original Scooby-Doo first aired?",
-      answer: [ "2002", "1970", "1985","1969" ],
+      answers: [ "2002", "1970", "1985","1969" ],
       correct: "1969"
     }, {
       q: "Where does Shaggy live?",
-      answer: [ "In the van", "In an apartment", "At a hotel", "In his parents' basement" ],
+      answers: [ "In the van", "In an apartment", "At a hotel", "In his parents' basement" ],
       correct: "In his parents' basement"
     }, {
       q: "Who is Scooby's best friend?",
-      answer: [ "Shaggy", "Velma", "Fred" , "Daphne" ],
+      answers: [ "Shaggy", "Velma", "Fred" , "Daphne" ],
       correct: "Shaggy"
     }, {
       q: "What ages are the kids in Scooby-Doo?",
-      answer: [ "12-14", "16-19", "19-20", "15-16",],
+      answers: [ "12-14", "16-19", "19-20", "15-16",],
       correct: "15-16"
     }
   ];
 
-  //create function for  increment timer for each question
+$(document).ready(function() {
+    
+
+  //create function for increment timer for each question
    function incrementTimer() {
     timer = setTimeout(function () {
       //write the "time remaining" to the DOM
@@ -65,61 +64,68 @@
         incrementTimer();
       }
     }, 1000 );
-  }
+  }//end of increment timer funtion
+
   //create function for start timer which includes increment timer
   function startTimer() {
     clearTimeout(timer);
     timeRemaining = 5; // in seconds
     incrementTimer();
-  }
+  };//end of start timer function
+  
   //create function to ask the next question
   function askQuestion() {
     if (remainingQuestions.length <= 0) {
       //end of game
       clearTimeout(timer);
-      //alert (" you got correct: " + rightAnswers.length);
-      //alert (" you got wrong: " + wrongAnswers.length);
-      //alert (" you got unanswered: " + unanswered.length);
+      $("#asked-question").hide();
+      $("#container").html("");
+      $("#container").append("Correct: " +rightAnswers.length+ "<br>")
+      $("#container").append("Incorrect: " +wrongAnswers.length+ "<br>")
+      $("#container").append("Unanswered: " +unanswered.length+ "<br>")
+      
     } else {
       startTimer();
-      
-      $( '#containerForChoiceOptions' ).html( "" );
+      //clear the container
+      $('#container').html("");
       questionObject = remainingQuestions.pop();
-      //var answer = prompt( question.q );
-      // if ( answer === question.answer )
-      //   rightAnswers.push( question );
-      // else
-      //   wrongAnswers.push( question );
-      //   
-      var choices = questionObject.answer;
-      $("#asked-question").html(questionObject.q);
-      for ( var i = 0; i < choices.length; i++ ) {
-        var choice = $("<div>");
-        choice.text(choices[ i ]);
-        choice.attr("id", "choice-" + i);
-        choice.attr("index", i);
-        $("#containerForChoiceOptions").append(choice);
+    
 
-        choice.click( function () {
-          //alert("I GUESSED "+ this.innerHTML);
+      //write the next question to the div "asked-question"
+      $("#asked-question").html(questionObject.q);
+
+      //get the answer choices from the question object
+      var choices = questionObject.answers;
+      //loop through
+      for (var i = 0; i < choices.length; i++) {
+        var choice = $("<div>");
+        choice.text(choices[i]);
+        //change the id of each choice to "id = choice[i]"
+        choice.attr("id", "choice-" + i);
+        //update the value of each choice's index to i.
+        choice.attr("index", i);
+        //write each answer choice to the div "#container"
+        $("#container").append(choice);
+
+        choice.click(function () {
+          
           if (this.innerHTML === questionObject.correct){
-            //alert("YAY");
             rightAnswers.push(questionObject);
             askQuestion();
           } else {
-            //alert("boo!");
             wrongAnswers.push(questionObject);
             askQuestion();
-          }
-        } );
-      }
-    }
-  }
+          };
+        });
+      };
+    };
+  };
   askQuestion();
 
+
+});//end of document ready function
+
   //startGame function
-  function startGame(){
+  //function startGame(){
     // Create the start button.
-$("#startButton").on("click", function() { 
-  
-  }
+//$("#startButton").on("click", function() { }
