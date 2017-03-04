@@ -44,91 +44,105 @@ var remainingQuestions = [{
 
 $(document).ready(function() {
 
+    $("#asked-question").hide();
+    $("#container").hide();
+    $("h3").hide();
+
     //startGame function
+    $("button").click(function() {
 
-    // Create the start button
-    var startButton = $("#container").append("<button>START</button>");
+        $("#asked-question").show();
+        $("#container").show();
+        $("h3").show();
+        $("#start").hide();
 
-    //create function for increment timer for each question
-    function incrementTimer() {
-        timer = setTimeout(function() {
-            //write the "time remaining" to the DOM
-            $("#timeRemaining").text(timeRemaining);
-            //If the time runs out and the question is not answered, add to unanswered questions array
-            if (timeRemaining <= 0) {
-                unanswered.push(questionObject);
-                //and ask the next question
-                askQuestion();
-                //otherwise
-            } else {
-                //timer decreases in 1 second intervals
-                timeRemaining = timeRemaining - 1;
-                incrementTimer();
-            }
-        }, 1000);
-    } //end of increment timer funtion
 
-    //create function for start timer which includes increment timer
-    function startTimer() {
-        clearTimeout(timer);
-        timeRemaining = 5; // in seconds
-        incrementTimer();
-    }; //end of start timer function
+        //create function for increment timer for each question
+        function incrementTimer() {
+            timer = setTimeout(function() {
+                //write the "time remaining" to the DOM
+                $("#timeRemaining").text(timeRemaining);
+                //If the time runs out and the question is not answered, add to unanswered questions array
+                if (timeRemaining <= 0) {
+                    unanswered.push(questionObject);
+                    //and ask the next question
+                    askQuestion();
+                    //otherwise
+                } else {
+                    //timer decreases in 1 second intervals
+                    timeRemaining = timeRemaining - 1;
+                    incrementTimer();
+                }
+            }, 1000);
+        } //end of increment timer funtion
 
-    //create function to ask the next question
-    function askQuestion() {
-        if (remainingQuestions.length <= 0) {
-            //end of game
+        //create function for start timer which includes increment timer
+        function startTimer() {
             clearTimeout(timer);
-            $("#asked-question").hide();
-            $("#container").html("");
-            $("#container").append("Correct: " + rightAnswers.length + "<br>")
-            $("#container").append("Incorrect: " + wrongAnswers.length + "<br>")
-            $("#container").append("Unanswered: " + unanswered.length + "<br>")
+            timeRemaining = 5; // in seconds
+            incrementTimer();
+        }; //end of start timer function
 
-        } else {
-            startTimer();
-            //clear the container
-            $('#container').html("");
-            questionObject = remainingQuestions.pop();
+        //create function to ask the next question
+        function askQuestion() {
+            if (remainingQuestions.length <= 0) {
+                //end of game
+                clearTimeout(timer);
+                $("#asked-question").hide();
+                $("#container").html("");
+                $("#container").append("Correct: " + rightAnswers.length + "<br>")
+                $("#container").append("Incorrect: " + wrongAnswers.length + "<br>")
+                $("#container").append("Unanswered: " + unanswered.length + "<br>")
+
+            } else {
+                startTimer();
+                //clear the container
+                $('#container').html("");
+                questionObject = remainingQuestions.pop();
 
 
-            //write the next question to the div "asked-question"
-            $("#asked-question").html(questionObject.q);
+                //write the next question to the div "asked-question"
+                $("#asked-question").html(questionObject.q);
 
-            //get the answer choices from the question object
-            var choices = questionObject.answers;
-            //loop through
-            for (var i = 0; i < choices.length; i++) {
-                var choice = $("<div>");
-                choice.text(choices[i]);
-                //change the id of each choice to "id = choice[i]"
-                choice.attr("id", "choice-" + i);
-                //update the value of each choice's index to i.
-                choice.attr("index", i);
-                //write each answer choice to the div "#container"
-                $("#container").append(choice);
+                //get the answer choices from the question object
+                var choices = questionObject.answers;
+                //loop through
+                for (var i = 0; i < choices.length; i++) {
+                    var choice = $("<div>");
+                    choice.text(choices[i]);
+                    //change the id of each choice to "id = choice[i]"
+                    choice.attr("id", "choice-" + i);
+                    //update the value of each choice's index to i.
+                    choice.attr("index", i);
+                    //write each answer choice to the div "#container"
+                    $("#container").append(choice);
 
-                choice.hover(function(){
-                  $(this).css({"background-color": "orange", "color": "white"});
-                }, function(){
-                  $(this).css({"background-color": "white", "color": "black"});
-                });
+                    choice.hover(function() {
+                        $(this).css({ "background-color": "orange", "color": "white" });
+                    }, function() {
+                        $(this).css({ "background-color": "white", "color": "orange" });
+                    });
 
-                choice.click(function() {
+                    choice.click(function() {
 
-                    if (this.innerHTML === questionObject.correct) {
-                        rightAnswers.push(questionObject);
-                        askQuestion();
-                    } else {
-                        wrongAnswers.push(questionObject);
-                        askQuestion();
-                    };
-                });
+                        if (this.innerHTML === questionObject.correct) {
+                            rightAnswers.push(questionObject);
+                            $("#asked-question").text("Correct!");
+                            //timer???
+                            askQuestion();
+
+                        } else {
+                            wrongAnswers.push(questionObject);
+                            askQuestion();
+                        };
+
+                    });
+                };
             };
         };
-    };
-    askQuestion();
+        askQuestion();
+
+    }); //end of on click start game
 
 
 }); //end of document ready function

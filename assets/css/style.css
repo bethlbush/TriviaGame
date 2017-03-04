@@ -4,5 +4,32 @@
 div{
 	font-family: 'Nova Oval', cursive;
 	font-spacing: 1.5;
-	text-align: center
+	text-align: center;
+	width: 475px;
+	display: block;
+	margin: 0 auto;
+	color: purple;
 	}
+
+button{
+	font-family: 'Nova Oval', cursive;
+	font-size: 50px;
+	background-color: orange;
+	color: white;
+	text-align: center;
+	width: 200px;
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 40px;
+	margin-top: 50px;
+}
+
+#image{
+	margin-top: 20px;
+}
+
+#asked-question{
+	color: purple;
+	font-size: 15px,
+}
+
